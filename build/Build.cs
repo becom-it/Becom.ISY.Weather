@@ -32,14 +32,13 @@ class Build : NukeBuild
 
     [Solution] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;
-    [GitVersion] readonly GitVersion GitVersion;
+    [GitVersion(Framework = "netcoreapp3.1")] readonly GitVersion GitVersion;
 
     AbsolutePath SourceDirectory => RootDirectory / "src";
     AbsolutePath TestsDirectory => RootDirectory / "tests";
     AbsolutePath OutputDirectory => RootDirectory / "output";
 
     Target Clean => _ => _
-        .Before(Restore)
         .Executes(() =>
         {
             SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
@@ -48,6 +47,7 @@ class Build : NukeBuild
         });
 
     Target Restore => _ => _
+        .DependsOn(Clean)
         .Executes(() =>
         {
             DotNetRestore(s => s
@@ -67,4 +67,16 @@ class Build : NukeBuild
                 .EnableNoRestore());
         });
 
+    Target CompileNuget => _ => _
+        .DependsOn(Compile)
+    .Executes(() => {
+    DotNetBuild(s =>
+        s.SetProjectFile(RootDirectory / "Becom.ISY.Weather.Contracts" / "Becom.ISY.Weather.Contracts.csproj")
+        .SetConfiguration(Configuration)
+                .SetAssemblyVersion(GitVersion.AssemblySemVer)
+                .SetFileVersion(GitVersion.AssemblySemFileVer)
+                .SetInformationalVersion(GitVersion.InformationalVersion)
+                .EnableNoRestore()
+        );
+    });
 }
