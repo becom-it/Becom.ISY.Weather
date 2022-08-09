@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Title>Becom ISY Weather Service Contracts</Title>
+    <Authors>Michael Prattinger</Authors>
+    <Company>BECOM Electronics GesmbH</Company>
+    <Product>BECOM ISY Weather</Product>
+    <Description>The Weather Service Response Models to use in clients when calling the ISY Weather Rest API</Description>
+    <Copyright>(c) 2022</Copyright>
+  </PropertyGroup>
+
+</Project>
