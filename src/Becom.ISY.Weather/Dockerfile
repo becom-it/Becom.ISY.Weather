@@ -6,10 +6,17 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /src
-COPY ["Becom.ISY.Weather/Becom.ISY.Weather.csproj", "Becom.ISY.Weather/"]
-RUN dotnet restore "Becom.ISY.Weather/Becom.ISY.Weather.csproj"
-COPY . .
+WORKDIR /
+COPY *.sln .
+COPY ["src/Becom.ISY.Weather/Becom.ISY.Weather.csproj", "src/Becom.ISY.Weather/"]
+COPY ["src/Becom.ISY.Weather.Contracts/Becom.ISY.Weather.Contracts.csproj", "src/Becom.ISY.Weather.Contracts/"]
+
+#RUN dotnet restore "Becom.ISY.Weather/Becom.ISY.Weather.csproj"
+RUN dotnet restore
+
+COPY /src/Becom.ISY.Weather/. src/Becom.ISY.Weather/.
+COPY /src/Becom.ISY.Weather.Contracts/. src/Becom.ISY.Weather.Contracts/.
+
 WORKDIR "/src/Becom.ISY.Weather"
 RUN dotnet build "Becom.ISY.Weather.csproj" -c Release -o /app/build
 
