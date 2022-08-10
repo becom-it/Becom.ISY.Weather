@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Becom.ISY.Weather", "src\Be
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Becom.ISY.Weather.Contracts", "src\Becom.ISY.Weather.Contracts\Becom.ISY.Weather.Contracts.csproj", "{7CC355EE-DA7E-40BE-84E5-FCDEB06FE905}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{9A0BB153-C61D-42CA-A314-0186B29AAF3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{E9BC7A3D-BE65-46C8-8BE3-27493ED076D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +15,8 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E9BC7A3D-BE65-46C8-8BE3-27493ED076D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9BC7A3D-BE65-46C8-8BE3-27493ED076D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A0BB153-C61D-42CA-A314-0186B29AAF3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9A0BB153-C61D-42CA-A314-0186B29AAF3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEA387D3-162E-4E7E-B375-1CC64835E0FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

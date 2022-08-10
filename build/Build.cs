@@ -7,16 +7,14 @@ using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
-using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
+using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.Docker;
 using Nuke.Common.Utilities.Collections;
 using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.PathConstruction;
-using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
-[CheckBuildProjectConfigurations]
-[ShutdownDotNetAfterServerBuild]
 class Build : NukeBuild
 {
     /// Support plugins are available for:
@@ -32,11 +30,15 @@ class Build : NukeBuild
 
     [Solution] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;
-    [GitVersion(Framework = "netcoreapp3.1")] readonly GitVersion GitVersion;
+    [GitVersion] readonly GitVersion GitVersion;
 
     AbsolutePath SourceDirectory => RootDirectory / "src";
     AbsolutePath TestsDirectory => RootDirectory / "tests";
     AbsolutePath OutputDirectory => RootDirectory / "output";
+
+    AbsolutePath ContractOutputDirectory => RootDirectory / "ocontract";
+
+    AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
 
     Target Clean => _ => _
         .Executes(() =>
@@ -44,21 +46,22 @@ class Build : NukeBuild
             SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
             TestsDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
             EnsureCleanDirectory(OutputDirectory);
+            EnsureCleanDirectory(ContractOutputDirectory);
+            EnsureCleanDirectory(ArtifactsDirectory);
         });
 
     Target Restore => _ => _
         .DependsOn(Clean)
         .Executes(() =>
         {
-            DotNetRestore(s => s
-                .SetProjectFile(Solution));
+            DotNetTasks.DotNetRestore(s => s.SetProjectFile(Solution));
         });
 
     Target Compile => _ => _
         .DependsOn(Restore)
         .Executes(() =>
         {
-            DotNetBuild(s => s
+            DotNetTasks.DotNetBuild(s => s
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
                 .SetAssemblyVersion(GitVersion.AssemblySemVer)
@@ -67,16 +70,18 @@ class Build : NukeBuild
                 .EnableNoRestore());
         });
 
-    Target CompileNuget => _ => _
+    Target Test => _ => _
         .DependsOn(Compile)
-    .Executes(() => {
-    DotNetBuild(s =>
-        s.SetProjectFile(RootDirectory / "Becom.ISY.Weather.Contracts" / "Becom.ISY.Weather.Contracts.csproj")
-        .SetConfiguration(Configuration)
-                .SetAssemblyVersion(GitVersion.AssemblySemVer)
-                .SetFileVersion(GitVersion.AssemblySemFileVer)
-                .SetInformationalVersion(GitVersion.InformationalVersion)
-                .EnableNoRestore()
-        );
-    });
+        .Executes(() => {
+            DotNetTasks.DotNetTest(s => s.SetProjectFile(Solution));
+        });
+
+    Target BuildDocker => _ => _
+        .DependsOn(Test)
+        .Executes(() => {
+            DockerTasks.DockerBuild(d => {
+                d.SetFile(RootDirectory / "Dockerfile");
+                return d;
+            });
+        });
 }
