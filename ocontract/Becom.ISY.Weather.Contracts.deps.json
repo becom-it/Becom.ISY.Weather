@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "Becom.ISY.Weather.Contracts/1.0.0": {
+        "runtime": {
+          "Becom.ISY.Weather.Contracts.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Becom.ISY.Weather.Contracts/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
