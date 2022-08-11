@@ -8,11 +8,25 @@ on:
 
 jobs:
 
-  build:
+  build-and-deploy:
 
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file src/Becom.ISY.Weather/Dockerfile --tag isyweather:$(date +%s)
+    - name: 'Checkout'
+      uses: actions/checkout@main
+      
+    - name: 'Login via Azure CLI'
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+    - name: 'Build and push image'
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    - run: |
+        docker build . --file src/Becom.ISY.Weather/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/isyweather:${{ github.sha }}
+        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/isyweather:${{ github.sha }}
