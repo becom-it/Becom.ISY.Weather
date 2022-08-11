@@ -19,6 +19,7 @@ using Nuke.Common.CI.GitHubActions;
 [GitHubActions("ci",
     GitHubActionsImage.UbuntuLatest,
     AutoGenerate = true,
+    FetchDepth = 0,
     OnPushBranches = new[] { "main" },
     OnPullRequestBranches = new[] { "main" },
     InvokedTargets = new[] { nameof(PushNuget) },
