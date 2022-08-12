@@ -4,7 +4,7 @@ using Becom.ISY.Weather.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.ConfigureAppConfiguration((context, config) => {
-    config.AddJsonFile("appsettings.k8s.json", true, true);
+    config.AddJsonFile("weatherconfig/appsettings.k8s.json", true, true);
 });
 
 builder.Services.AddWeather(builder.Configuration);
