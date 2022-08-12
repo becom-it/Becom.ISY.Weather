@@ -71,6 +71,7 @@ public class WeatherService : IWeatherService
         {
             _logger.LogInformation("Loading data from the open weather map web service...");
 
+            _logger.LogDebug("Creating http client from factory...");
             var client = _httpClientFactory.CreateClient("owm");
 
             var groups = _config.Companies.Select(x => x.MapId.ToString()).Aggregate((a, x) => $"{a},{x}");
@@ -78,6 +79,7 @@ public class WeatherService : IWeatherService
             _logger.LogDebug($"Loading weather data for map ids: {groups}...");
             var res = await client.GetAsync($"group?id={groups}");
 
+            _logger.LogDebug(string.Format("Receiving: {0}", res.StatusCode));
             if (res.IsSuccessStatusCode)
             {
                 _logger.LogInformation("Request successfull! Deserialyzing data...");
@@ -99,10 +101,12 @@ public class WeatherService : IWeatherService
         }
         catch (HttpRequestException ex)
         {
+            _logger.LogDebug(String.Format("Error: HttpRequestException: {0}", ex.Message), ex);
             throw ex;
         }
         catch (Exception ex)
         {
+            _logger.LogDebug(String.Format("Error: Exception: {0}", ex.Message), ex);
             throw new Exception($"Error when loading data from the open weather map web api: {ex.Message}", ex);
         }
     }
