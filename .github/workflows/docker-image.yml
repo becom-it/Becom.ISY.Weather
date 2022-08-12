@@ -29,4 +29,4 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
     - run: |
         docker build . --file src/Becom.ISY.Weather/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/isyweather:latest -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/isyweather:${{ github.sha }}
-        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/isyweather:latest
+        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/isyweather
