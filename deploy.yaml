@@ -12,10 +12,17 @@ spec:
       labels:
         app: isyweather
     spec:
+      volumes:
+      - name: isyweather-config-volume
+        configMap:
+          name: isyweather-config
       containers:
       - image: becom.azurecr.io/isyweather:latest
         imagePullPolicy: Always
         name: isyweather
+        volumeMounts:
+          - mountPath: /app/appsettings.k8s.json
+            name: isyweather-config-volume
         ports:
         - containerPort: 80
       imagePullSecrets:
