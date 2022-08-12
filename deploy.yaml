@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: isyweather
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: isyweather
+  template:
+    metadata:
+      labels:
+        app: isyweather
+    spec:
+      containers:
+      - image: becom.azurecr.io/isyweather:latest
+        imagePullPolicy: Always
+        name: isyweather
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+        - name: acr

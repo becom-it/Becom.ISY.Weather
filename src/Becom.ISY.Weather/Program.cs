@@ -3,13 +3,13 @@ using Becom.ISY.Weather.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host.ConfigureAppConfiguration((context, config) => {
+    config.AddJsonFile("appsettings.k8s.json", true, true);
+});
+
 builder.Services.AddWeather(builder.Configuration);
 
-// Add services to the container.
-
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
 
 app.MapGet("/", async (IWeatherService weatherService) =>
 {
