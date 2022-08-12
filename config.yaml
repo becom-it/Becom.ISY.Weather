@@ -7,9 +7,7 @@ data:
     {
       "Logging": {
         "LogLevel": {
-          "Default": "Information",
-          "System": "Error",
-          "Microsoft": "Error"
+          "Default": "Debug"
         }
       },
       "WeatherConfig": {
